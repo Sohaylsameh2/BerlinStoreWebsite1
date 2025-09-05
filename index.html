@@ -45,7 +45,7 @@
         }
 
         #statusImage {
-            width: 350px; /* كبرنا الصورة */
+            width: 350px;
             height: auto;
             margin-top: 15px;
             opacity: 0;
@@ -77,10 +77,10 @@
 
     <script>
         const orders = {
-            "74562341": { name: "مازن", status: "Shipped", img: "images/my-shipped.png" },
-            "12345678": { name: "ليلى", status: "Delivered", img: "images/my-delivered.png" },
-            "87654321": { name: "أحمد", status: "Processing", img: "images/my-processing.png" },
-            "11223344": { name: "سارة", status: "Out for Delivery", img: "images/my-outfordelivery.png" }
+            "74562341": { status: "Shipped", img: "images/my-shipped.png" },
+            "12345678": { status: "Delivered", img: "images/my-delivered.png" },
+            "87654321": { status: "Processing", img: "images/my-processing.png" },
+            "11223344": { status: "Out for Delivery", img: "images/my-outfordelivery.png" }
         };
 
         document.getElementById("orderCode").addEventListener("keypress", function (e) {
@@ -94,7 +94,7 @@
 
             if (orders[code]) {
                 let order = orders[code];
-                resultText.textContent = `${order.name} - Order Status: ${order.status}`;
+                resultText.textContent = `Order Status: ${order.status}`;
 
                 let colors = {
                     "Processing": "orange",
@@ -104,7 +104,6 @@
                 };
                 resultText.style.color = colors[order.status] || "black";
 
-                // تأثير fade-in للصورة
                 statusImage.src = order.img;
                 statusImage.style.opacity = 0;
                 statusImage.style.transform = "scale(0.5)";
@@ -114,13 +113,9 @@
                     statusImage.style.transform = "scale(1)";
                 }, 50);
 
-                // تأثير fade-in للنص
                 resultText.style.opacity = 0;
-                setTimeout(() => {
-                    resultText.style.opacity = 1;
-                }, 50);
+                setTimeout(() => { resultText.style.opacity = 1; }, 50);
 
-                // مسح الحقل وتركيزه
                 document.getElementById("orderCode").value = "";
                 document.getElementById("orderCode").focus();
             } else {
