@@ -14,39 +14,47 @@
         }
 
         input {
-            padding: 8px;
-            font-size: 16px;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
 
         button {
-            padding: 8px 15px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 18px;
             margin-left: 10px;
             cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
+
+            button:hover {
+                background-color: #ddd;
+            }
 
         #statusContainer {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         #statusImage {
-            width: 300px; /* كبرنا الصورة */
+            width: 200px;
             height: auto;
-            display: none;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: transform 0.5s ease, opacity 0.5s ease;
+            margin-top: 15px;
         }
 
         #resultText {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             margin-top: 10px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            text-align: center;
         }
     </style>
 </head>
@@ -58,56 +66,45 @@
     </div>
 
     <div id="statusContainer">
-        <img id="statusImage" src="" alt="">
         <div id="resultText"></div>
+        <img id="statusImage" src="" alt="" style="display:none;">
     </div>
 
     <script>
+        const orders = {
+            "74562341": { name: "مازن", status: "Shipped", img: "images/my-shipped.png" },
+        };
+
+        document.getElementById("orderCode").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") checkOrder();
+        });
+
         function checkOrder() {
             let code = document.getElementById("orderCode").value.trim();
-            let statusImage = document.getElementById("statusImage");
             let resultText = document.getElementById("resultText");
-
-            let orders = {
-                "123": { status: "Shipped", img: "images/my-shipped.png" },
-                "456": { status: "Delivered", img: "images/my-delivered.png" },
-                "789": { status: "Processing", img: "images/my-processing.png" },
-                "101": { status: "Out for Delivery", img: "images/my-outfordelivery.png" }
-            };
+            let statusImage = document.getElementById("statusImage");
 
             if (orders[code]) {
-                // الصورة
-                statusImage.src = orders[code].img;
-                statusImage.style.display = "block";
-                statusImage.style.opacity = 0;
-                statusImage.style.transform = "scale(0.5)";
-                setTimeout(() => {
-                    statusImage.style.opacity = 1;
-                    statusImage.style.transform = "scale(1)";
-                }, 50);
+                let order = orders[code];
+                resultText.textContent = `${order.name} - Order Status: ${order.status}`;
 
-                // النص
-                resultText.textContent = "Order Status: " + orders[code].status;
                 let colors = {
                     "Processing": "orange",
                     "Shipped": "blue",
                     "Delivered": "green",
                     "Out for Delivery": "purple"
                 };
-                resultText.style.color = colors[orders[code].status];
-                resultText.style.opacity = 0;
-                setTimeout(() => {
-                    resultText.style.opacity = 1;
-                }, 50);
+                resultText.style.color = colors[order.status] || "black";
 
+                statusImage.src = order.img;
+                statusImage.style.display = "block";
+
+                document.getElementById("orderCode").value = "";
+                document.getElementById("orderCode").focus();
             } else {
-                statusImage.style.display = "none";
                 resultText.textContent = "Order not found!";
                 resultText.style.color = "red";
-                resultText.style.opacity = 0;
-                setTimeout(() => {
-                    resultText.style.opacity = 1;
-                }, 50);
+                statusImage.style.display = "none";
             }
         }
     </script>
