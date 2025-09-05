@@ -45,16 +45,21 @@
         }
 
         #statusImage {
-            width: 200px;
+            width: 350px; /* كبرنا الصورة */
             height: auto;
             margin-top: 15px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
 
         #resultText {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
             text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
     </style>
 </head>
@@ -66,13 +71,16 @@
     </div>
 
     <div id="statusContainer">
+        <img id="statusImage" src="" alt="">
         <div id="resultText"></div>
-        <img id="statusImage" src="" alt="" style="display:none;">
     </div>
 
     <script>
         const orders = {
             "74562341": { name: "مازن", status: "Shipped", img: "images/my-shipped.png" },
+            "12345678": { name: "ليلى", status: "Delivered", img: "images/my-delivered.png" },
+            "87654321": { name: "أحمد", status: "Processing", img: "images/my-processing.png" },
+            "11223344": { name: "سارة", status: "Out for Delivery", img: "images/my-outfordelivery.png" }
         };
 
         document.getElementById("orderCode").addEventListener("keypress", function (e) {
@@ -96,14 +104,30 @@
                 };
                 resultText.style.color = colors[order.status] || "black";
 
+                // تأثير fade-in للصورة
                 statusImage.src = order.img;
+                statusImage.style.opacity = 0;
+                statusImage.style.transform = "scale(0.5)";
                 statusImage.style.display = "block";
+                setTimeout(() => {
+                    statusImage.style.opacity = 1;
+                    statusImage.style.transform = "scale(1)";
+                }, 50);
 
+                // تأثير fade-in للنص
+                resultText.style.opacity = 0;
+                setTimeout(() => {
+                    resultText.style.opacity = 1;
+                }, 50);
+
+                // مسح الحقل وتركيزه
                 document.getElementById("orderCode").value = "";
                 document.getElementById("orderCode").focus();
             } else {
                 resultText.textContent = "Order not found!";
                 resultText.style.color = "red";
+                resultText.style.opacity = 0;
+                setTimeout(() => { resultText.style.opacity = 1; }, 50);
                 statusImage.style.display = "none";
             }
         }
